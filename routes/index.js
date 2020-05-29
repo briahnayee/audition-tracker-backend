@@ -4,21 +4,16 @@ var router = express.Router();
 const auditionList = [
   {
     id: 1,
-    project: 'Herp',
-    callbacks: []
+    project: 'F&F',
+    role: 'racer chick',
+    castingDirector: 'Rachel Tenner',
+    productionCompany: 'Universal Pictures',
+    medium: 'feature film',
+    source: 'manager',
+    method: 'in-person',
+    notes: 'Taped with assoc. Rick Messina. Went well. He gave me 5 takes.',
+    callbacks: [],
   },
-  {
-    id: 2,
-    project: 'Derp'
-  },
-  {
-    id: 3,
-    project: 'Fleep'
-  },
-  {
-    id: 4,
-    project: 'Floop'
-  }
 ]
 
 router.get('/auditions', (req, res, next) => {
@@ -35,7 +30,14 @@ router.get('/auditions/:id', (req, res, next) => {
 router.post('/auditions', (req, res, next) => {
   const audition = {
     id: auditionList.length,
-    project: req.body.project
+    project: req.body.project,
+    role: req.body.role,
+    castingDirector: req.body.castingDirector,
+    productionCompany: req.body.productionCompany,
+    medium: req.body.medium,
+    source: req.body.source,
+    method: req.body.method,
+    notes: req.body.notes
   }
   auditionList.push(audition)
   res.json(auditionList)
@@ -55,6 +57,12 @@ router.put('/auditions/:id', (req, res, next) => {
   })
   // CHECK IF AUDTION WAS NOT FOUND
   auditionList[i].project = req.body.project
+  auditionList[i].role = req.body.role
+  auditionList[i].castingDirector = req.body.castingDirector
+  auditionList[i].productionCompany = req.body.productionCompany
+  auditionList[i].medium = req.body.medium
+  auditionList[i].source = req.body.source
+  auditionList[i].notes = req.body.notes
   res.json(auditionList)
 })
 
@@ -79,7 +87,10 @@ router.post('/auditions/:id', (req, res, next) => {
   })
   const newCallback = {
     id: auditionList[i].callbacks.length,
-    date: req.body.date
+    date: req.body.date,
+    coaching: req.body.coaching,
+    method: req.body.method,
+    notes: req.body.coaching,
   }
   auditionList[i].callbacks.push(newCallback)
   res.json(auditionList[i].callbacks)
@@ -92,19 +103,8 @@ router.delete('/auditions/:id/:callbackid', (req, res, next) => {
   const j = auditionList[i].callbacks.findIndex(c => {
     return c.id == req.params.callbackid
   })
-  console.log(i,j)
   auditionList[i].callbacks.splice(j, 1)
   res.json(auditionList[i].callbacks)
 })
-
-
-
-/*
-
-ADD GET SINGLE / POST / PUT / DELETE ROUTES FOR CALLBACKS HERE
-
-*/
-
-
 
 module.exports = router;
