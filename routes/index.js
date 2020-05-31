@@ -3,15 +3,17 @@ var router = express.Router();
 
 const auditionList = [
   {
-    id: 1,
+    id: 0,
     project: 'F&F',
     role: 'racer chick',
+    date: '5/5/20',
     castingDirector: 'Rachel Tenner',
     productionCompany: 'Universal Pictures',
     medium: 'feature film',
     source: 'manager',
     method: 'in-person',
     notes: 'Taped with assoc. Rick Messina. Went well. He gave me 5 takes.',
+    coaching: 'false',
     callbacks: [],
   },
 ]
@@ -28,16 +30,20 @@ router.get('/auditions/:id', (req, res, next) => {
 })
 
 router.post('/auditions', (req, res, next) => {
+  console.log(req.body)
   const audition = {
     id: auditionList.length,
     project: req.body.project,
     role: req.body.role,
+    coaching: req.body.coaching,
+    date: req.body.date,
     castingDirector: req.body.castingDirector,
     productionCompany: req.body.productionCompany,
     medium: req.body.medium,
     source: req.body.source,
     method: req.body.method,
-    notes: req.body.notes
+    notes: req.body.notes,
+    callbacks: []
   }
   auditionList.push(audition)
   res.json(auditionList)
@@ -48,7 +54,7 @@ router.put('/auditions/:id', (req, res, next) => {
     res.json('Please enter a project name.')
     return
   }
-  if (Number.isInteger(req.params.id) == false) {
+  if (Number.isInteger(parseInt(req.params.id)) === false) {
     res.json('Not a valid url.')
     return
   }
@@ -70,6 +76,10 @@ router.delete('/auditions/:id', (req, res, next) => {
   const i = auditionList.findIndex(e => {
     return e.id == req.params.id
   })
+  if (i === -1) {
+    res.json("Invalid ID.")
+    return
+  }
   auditionList.splice(i, 1)
   res.json(auditionList)
 })
