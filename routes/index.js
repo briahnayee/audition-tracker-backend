@@ -163,7 +163,7 @@ router.delete('/auditions/:id', checkForValidUser, async (req, res, next) => {
   WHERE 
     id = ${req.params.id}
   AND
-    userId = ${req.user.id}
+    "userId" = ${req.user.id}
 `
 const data = await client.query(query)
   await client.end()
