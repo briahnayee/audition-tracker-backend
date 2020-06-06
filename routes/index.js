@@ -84,7 +84,6 @@ router.get('/auditions/:id', checkForValidUser, async (req, res, next) => {
 router.post('/auditions', checkForValidUser, async (req, res, next) => {
   const client = new Client(config.dev);
   await client.connect();
-  console.log(req.body)
   const query = `
     INSERT INTO auditions (
       "userId",
