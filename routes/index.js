@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-const config = require('../database.json')
+const config = require('../database')
 const { Client } = require('pg');
 const checkForValidUser = require('../middleware/checkForValidUser')
 
@@ -24,7 +24,8 @@ const auditionList = [
 ]
 
 router.post('/createaccount', async (req, res, next) => {
-  const client = new Client(config.dev);
+  console.log(config)
+  const client = new Client(config);
   await client.connect();
   const authtoken = uuid()
   const data = await client.query(`INSERT INTO users (
@@ -43,7 +44,7 @@ router.post('/createaccount', async (req, res, next) => {
 })
 
 router.post('/login', async (req, res, next) => {
-  const client = new Client(config.dev);
+  const client = new Client(config);
   await client.connect();
   const users = await client.query(`SELECT * FROM users WHERE email = '${req.body.email}' AND password = '${req.body.password}'`)
   if (users.rows.length > 0) {
@@ -64,7 +65,7 @@ router.post('/login', async (req, res, next) => {
 })
 
 router.get('/auditions', checkForValidUser, async (req, res, next) => {
-  const client = new Client(config.dev);
+  const client = new Client(config);
   await client.connect();
   const data = await client.query(`SELECT * FROM auditions WHERE "userId" = '${req.user.id}'`)
   console.log(data.rows)
@@ -73,7 +74,7 @@ router.get('/auditions', checkForValidUser, async (req, res, next) => {
 })
 
 router.get('/auditions/:id', checkForValidUser, async (req, res, next) => {
-  const client = new Client(config.dev);
+  const client = new Client(config);
   await client.connect();
   const data = await client.query(`SELECT * FROM auditions WHERE id = ${req.params.id} AND "userId" = '${req.user.id}'`)
   console.log(data.rows)
@@ -82,7 +83,7 @@ router.get('/auditions/:id', checkForValidUser, async (req, res, next) => {
 })
 
 router.post('/auditions', checkForValidUser, async (req, res, next) => {
-  const client = new Client(config.dev);
+  const client = new Client(config);
   await client.connect();
   const query = `
     INSERT INTO auditions (
@@ -128,7 +129,7 @@ router.put('/auditions/:id', checkForValidUser, async (req, res, next) => {
     res.json('Not a valid url.')
     return
   }
-  const client = new Client(config.dev);
+  const client = new Client(config);
   await client.connect();
   const query = `
     UPDATE auditions
@@ -155,7 +156,7 @@ router.put('/auditions/:id', checkForValidUser, async (req, res, next) => {
 })
 
 router.delete('/auditions/:id', checkForValidUser, async (req, res, next) => {
-  const client = new Client(config.dev);
+  const client = new Client(config);
   await client.connect();
   const query = `
   DELETE FROM auditions
