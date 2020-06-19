@@ -1,0 +1,10 @@
+{
+    "dev": {
+        "driver": "pg",
+        "user": "bri",
+        "password": "",
+        "host": "localhost",
+        "database": "auditions",
+        "port": "5432"
+    }
+}
